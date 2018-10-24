@@ -1,0 +1,409 @@
+<section>
+  <h1>Java 11 - What's New</h1>
+
+  <small>
+    Yuri Sakhno<br />
+    GitHub: <a target="_blank" href="https://github.com/ysakhno/present-java11">ysakhno/present-java11</a>
+  </small>
+</section>
+
+<section>
+  <h2>Current state of things</h2>
+
+  <ul>
+    <li>Java 11 got released on September 25, 2018</li>
+    <li>It's a current long-term support release</li>
+    <li>previous LTS release will be available until January 1, 2019<sup>1</sup></li>
+  </ul>
+
+  <p><br></p>
+  <p class="smaller"><sup>1</sup> For commercial use. More on this later.</p>
+</section>
+
+<section>
+  <h2>New Features</h2>
+
+  <section></section>
+
+  <section>
+    <h3>Unicode 10 (<a href="http://openjdk.java.net/jeps/327">JEP 327</a>)<br>
+      <span class="smaller">(and Unicode 9)</span></h3>
+
+    <p>Added support for version 10.0 (and 9.0) of the Unicode Standard.</p>
+
+    <ul>
+      <li>16018 new characters <span class="grey">(of them 128 emoji and a Bitcoin sign)</span></li>
+      <li>10 new scripts <span class="grey">(Adlam,
+        Bhaiksuki,
+        Marchen,
+        Newa,
+        Osage,
+        Tangut,
+        Masaram Gondi,
+        Nushu,
+        Soyombo,
+        Zanabazar Square)</span></li>
+      <li>18 new blocks <span class="grey">(10 for scripts above, plus 8 for existing scripts: 
+        Cyrillic Extended-C,
+        Mongolian Supplement,
+        Ideographic Symbols and Punctuation,
+        Tangut Components,
+        Glagolitic Supplement,
+        Syriac Supplement,
+        Kana Extended-A,
+        CJK Extension F)</span></li>
+    </ul>
+
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8191410">JDK-8191410</a></p>
+  </section>
+
+  <section>
+    <h3>Updated Locale Data to Unicode CLDR v33</h3>
+
+    <p>Existing Common Locale Data Registry (CLDR) data has been upgraded to version 33.</p>
+
+    <p class="smaller">More info at: <a href="http://cldr.unicode.org/index/downloads/cldr-33"><i>http://cldr.unicode.org/</i>index/downloads/cldr-33</a></p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8202537">JDK-8202537</a></p>
+  </section>
+
+  <section>
+    <h3>Epsilon, A No-Op Garbage Collector (<a href="https://openjdk.java.net/jeps/318">JEP 318</a>)</h3>
+
+    <p>GC that handles memory allocation but does not implement any actual memory reclamation mechanism. Once the available Java heap is exhausted, the JVM shuts down.</p>
+
+    <h4>Applications</h4>
+    <ul>
+      <li>Performance testing (of other GCs)</li>
+      <li>Memory pressure testing</li>
+      <li>Extremely short lived jobs</li>
+      <li>Last-drop latency improvements</li>
+    </ul>
+
+    <p>Use with <code>-XX:+UseEpsilonGC</code></p>
+
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8174901">JDK-8174901</a></p>
+  </section>
+
+  <section>
+    <h3>Z Garbage Collector (ZGC) (<a href="https://openjdk.java.net/jeps/333">JEP 333</a>)</h3>
+
+    <p>Scalable Low-Latency Garbage Collector (Experimental). Designed to meet the following goals:</p>
+    <ul>
+      <li>Pause times do not exceed 10 ms</li>
+      <li>Pause times do not increase with the heap or live-set size</li>
+      <li>Handle heaps ranging from a few hundred megabytes to multi terabytes in size</li>
+    </ul>
+
+    <p>Enable with <code>-XX:+UnlockExperimentalVMOptions -XX:+UseZGC</code></p>
+
+    <h4>Limitations</h4>
+    <ul>
+      <li>Only available on Linux/x64</li>
+      <li>Using compressed oops and/or compressed class points is not supported</li>
+      <li>Class unloading is not supported</li>
+      <li>Using ZGC in combination with Graal is not supported</li>
+    </ul>
+
+    <p class="bugreport"><a href="https://bugs.java.com/view_bug.do?bug_id=JDK-8197831">JDK-8197831</a></p>
+  </section>
+
+  <section>
+    <h3>Launching Single-File Source-Code Programs (<a href="https://openjdk.java.net/jeps/330">JEP 330</a>)</h3>
+
+    <p>Having file HelloWorld.java with the following content:</p>
+    <pre><code class="lang-java" data-trim contenteditable>
+package hello;
+
+public class World {
+        
+    public static void main(String[] args) {
+        System.out.println("Hello World!");
+    }
+}
+</code></pre>
+
+    <div class="fragment">You can run it using the <code>java</code> application directly:
+    <pre><code class="console">
+$ java HelloWorld.java
+Hello World!
+    </code></pre></div>
+
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8192920">JDK-8192920</a></p>
+  </section>
+
+  <section>
+    <h3>Local-Variable Syntax for Lambda Parameters (<a href="https://openjdk.java.net/jeps/323">JEP 323</a>)</h3>
+
+    <p>Allows <code>var</code> to be used when declaring the formal parameters of implicitly typed lambda expressions.</p>
+
+    <pre><code class="lang-java" data-trim contenteditable>
+    (x, y) -> x.process(y)          // Implicitly typed lambda expression.
+    (var x, var y) -> x.process(y)  // This expression is equivalent.
+</code></pre>
+
+    <p>Modifiers, notably annotations, can be applied to local variables and lambda formals without losing brevity:</p>
+    <pre><code class="lang-java" data-trim contenteditable>
+    @Nonnull var x = new Foo();
+    (@Nonnull var x, @Nullable var y) -> x.process(y)
+</code></pre>
+    
+    <h4>Limitations</h4>
+    <pre><code class="lang-java" data-trim contenteditable>
+    (var x, y) -> x.process(y)      // Cannot mix 'var' and 'no var'
+    (var x, int y) -> x.process(y)  // Cannot mix 'var' and manifest types
+</code></pre>
+
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8193259">JDK-8193259</a></p>
+  </section>
+</section>
+
+<section>
+  <h2>API changes</h2>
+
+  <section></section>
+
+  <section>
+    <h3>Removed <code>Thread.destroy()</code> and <code>Thread.stop(Throwable)</code> Methods</h3>
+    <p>The methods have been deprecated for several Java SE releases.</p>
+    <ul>
+      <li>The <code>Thread.destroy()</code> method has never been implemented</li>
+      <li>The <code>Thread.stop(Throwable)</code> method has been non-functional since Java SE 8</li>
+    </ul>
+    <p class="smaller">* Note that the no-arg method <code>Thread.stop()</code> is unaffected by this change.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8204243">JDK-8204243</a></p>
+  </section>
+
+  <section>
+    <h3>Standardized the HTTP Client API (<a href="https://openjdk.java.net/jeps/321">JEP 321</a>)</h3>
+    <p>Standardized the incubated HTTP Client API introduced in JDK 9, via <a href="https://openjdk.java.net/jeps/110">JEP 110</a>,
+      and updated in JDK 10. The HTTP Client has been standarized in Java 11.</p>
+    <p>Previously incubating API, located in the <code>jdk.incubator.http</code> package, has been removed.
+      Now the code needs to be updated to import the HTTP types from the standard package name, <code>java.net.http</code>.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8181784">JDK-8181784</a></p>
+  </section>
+
+  <section>
+    <h3>Deprecated the Nashorn JavaScript Engine (<a href="https://openjdk.java.net/jeps/335">JEP 335</a>)</h3>
+    <p>Oracle decided that the rapid pace, at which ECMAScript language is adapted and modified,
+      makes the Nashorn challenging to maintain.</p>
+    <p>Because of that, two JDK modules are terminally deprecated (annotated with <code>@Deprecated(forRemoval=true)</code>):</p>
+    <ul>
+      <li><code>jdk.scripting.nashorn</code> <span class="grey">&#x2014; contains the <code>jdk.nashorn.api.scripting</code> and <code>jdk.nashorn.api.tree</code> packages</span></li>
+      <li><code>jdk.scripting.nashorn.shell</code> <span class="grey">-- contains the jjs tool</span></li>
+    </ul>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8202786">JDK-8202786</a></p>
+  </section>
+
+  <section>
+    <h3>New <code>Collection.toArray(IntFunction)</code> Default Method</h3>
+    <p>This method allows the collection's elements to be transferred to a newly created array of a desired runtime type.</p>
+    <p>Suppose <code>x</code> is a collection known to contain only strings. The following code can be used to dump the collection into a newly allocated array of strings:</p>
+    <pre><code class="lang-java" data-trim contenteditable>
+    String[] y = x.toArray(String[]::new);
+    </code></pre>
+    <p class="smaller">* Default implementation calls the generator function with 0, and then passes the resulting array to <code>Collection.toArray(Object[])</code>.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8060192">JDK-8060192</a></p>
+  </section>
+
+  <section>
+    <h3>Removed <code>com.sun.awt.AWTUtilities</code> Class</h3>
+    <p>This class was deprecated with <code>forRemoval=true</code> in JDK 10. It was unused in the JDK and has been removed in JDK 11.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8200149">JDK-8200149</a></p>
+  </section>
+
+  <section>
+    <h3><code>ThreadPoolExecutor</code> does not Specify a Dependency on Finalization</h3>
+    <p>Before JDK 11, method <code>finalize()</code> of <code>ThreadPoolExecutor</code> called <code>shutdown()</code>. Now it does nothing.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8190324">JDK-8190324</a></p>
+  </section>
+</section>
+
+<section>
+  <h2>Security</h2>
+
+  <section></section>
+
+  <section>
+    <h3>Transport Layer Security (TLS) 1.3 (<a href="https://openjdk.java.net/jeps/332">JEP 332</a>)</h3>
+    <p>JDK 11 includes an implementation of the Transport Layer Security (TLS) 1.3 specification (<a href="https://tools.ietf.org/html/rfc8446">RFC 8446</a>).
+      For TLS 1.3, the following new standard algorithm names are defined:</p>
+    <ol>
+      <li>TLS protocol version name: <code>TLSv1.3</code></li>
+      <li>SSLContext algorithm name: <code>TLSv1.3</code></li>
+      <li>TLS cipher suite names for TLS 1.3: <code>TLS_AES_128_GCM_SHA256</code>, <code>TLS_AES_256_GCM_SHA384</code></li>
+      <li>keyType for X509KeyManager: <code>RSASSA-PSS</code></li>
+      <li>authType for X509TrustManager: <code>RSASSA-PSS</code></li>
+    </ol>
+
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8145252">JDK-8145252</a></p>
+  </section>
+
+  <section>
+    <h4>Supported TLS v1.3 features</h4>
+    <ul>
+      <li>Protocol version negotiation</li>
+      <li>TLS 1.3 full handshake</li>
+      <li>TLS 1.3 session resumption</li>
+      <li>TLS 1.3 key and IV update</li>
+      <li>TLS 1.3 updated OCSP stapling</li>
+      <li>TLS 1.3 backward compatibility mode</li>
+      <li>TLS 1.3 required extensions and algorithms</li>
+      <li>RSASSA-PSS signature algorithms</li>
+    </ul>
+
+    <p><br></p>
+    <h4>Not supported</h4>
+    <ul>
+      <li>0-RTT data</li>
+      <li>Post-handshake authentication</li>
+      <li>Signed certificate timestamps (SCT): <a href="https://tools.ietf.org/html/rfc6962">RFC 6962</a></li>
+    </ul>
+  </section>
+  
+  <section>
+    <h3>Other Security Features</h3>
+    <ul>
+      <li>Key Agreement with Curve25519 and Curve448 (<a href="https://openjdk.java.net/jeps/324">JEP 324</a>)
+        <span class="smaller">(<a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8181595">JDK-8181595</a>)</span></li>
+      <li>Brainpool EC Support (<a href="https://tools.ietf.org/html/rfc5639">RFC 5639</a>)
+        <span class="smaller">(<a href="http://bugs.java.com/view_bug.do?bug_id=JDK-7007966">JDK-7007966</a>)</span></li>
+      <li>ChaCha20 and Poly1305 Cryptographic Algorithms (<a href="https://openjdk.java.net/jeps/329">JEP 329</a>)
+        <span class="smaller">(<a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8153028">JDK-8153028</a>)</span></li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <h2>Removed and Obsoleted Features</h2>
+
+  <section></section>
+
+  <section>
+    <h3>Removed Java EE and CORBA Modules (<a href="https://openjdk.java.net/jeps/320">JEP 320</a>)</h3>
+    <p>The following modules have been removed from Java SE 11 and JDK 11:</p>
+    <ul>
+      <li><code>java.xml.ws</code> (JAX-WS, plus the related technologies SAAJ and Web Services Metadata)</li>
+      <li><code>java.xml.bind</code> (JAXB)</li>
+      <li><code>java.activation</code> (JAF)</li>
+      <li><code>java.xml.ws.annotation</code> (Common Annotations)</li>
+      <li><code>java.corba</code> (CORBA)</li>
+      <li><code>java.transaction</code> (JTA)</li>
+      <li><code>java.se.ee</code> (aggregator module for the six modules above)</li>
+      <li><code>jdk.xml.ws</code> (tools for JAX-WS)</li>
+      <li><code>jdk.xml.bind</code> (tools for JAXB)</li>
+    </ul>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8190378">JDK-8190378</a></p>
+  </section>
+
+  <section>
+    <h3>Other Removed Tools and Features</h3>
+    <ul>
+      <li>Java Deployment Technologies <span class="smaller">(JDK-8185077, not public)</span>
+        <ul>
+          <li>Java Plugin</li>
+          <li>Java WebStart</li>
+          <li>Java Control Panel</li>
+        </ul></li>
+      <li>appletviewer Launcher <span class="smaller">(<a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8200146">JDK-8200146</a>)</span></li>
+      <li>Java Management Console (JMC) <span class="smaller">(JDK-8202347, not public)</span></li>
+      <li>JavaFX <span class="smaller">(JDK-8198527, not public)</span></li>
+      <li>Lucida Fonts <span class="smaller">(JDK-8191522, not public)</span></li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Oracle JDK's <code>javax.imageio</code> JPEG Plugin No Longer Supports Images with alpha</h3>
+    <p>Previously, Oracle JDK used proprietary extensions to the IJG JPEG library
+      in providing optional color space support.</p>
+    <ul>
+      <li>This allowed to support images with an alpha component on both reading and writing.</li>
+      <li>OpenJDK never actually supported this</li>
+      <li>OpenJDK reported it could write images with alpha channel, but threw an exception on being asked to do so</li>
+    </ul>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8204187">JDK-8204187</a></p>
+  </section>
+
+  <section>
+    <h3>Removed <code>sun.misc.Unsafe.defineClass</code> Method</h3>
+    <p>Users should use the public replacement,
+      <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/invoke/MethodHandles.Lookup.html#defineClass(byte%5B%5D)">java.lang.invoke.MethodHandles.Lookup.defineClass()</a>,
+      added in Java SE 9.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8193033">JDK-8193033</a></p>
+  </section>
+
+  <section>
+    <h3>Support for Commercial Features is now Obsolete</h3>
+    <p>Oracle either open-sourced most of their commercial features, or dropped them altogether if they had been not that popular.</p>
+    <p>As a result, <code>-XX:+UnlockCommercialFeatures</code> and <code>-XX:+LogCommercialFeatures</code>
+      command line arguments have been obsoleted, and will generate a warning message if used.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8202331">JDK-8202331</a></p>
+  </section>
+
+  <section>
+    <h3>Deprecated the Pack200 Tools and API (<a href="https://openjdk.java.net/jeps/336">JEP 336</a>)</h3>
+    <ul>
+      <li>Pack200 is a compression scheme for JAR files introduced in Java SE 5.
+        Its goal was "to decrease disk and bandwidth requirements for Java application packaging, transmission, and delivery"</li>
+      <li class="fragment">JDK 8 was the last release compressed with pack200 at build time and uncompressed with unpack200 at install time</li>
+      <li class="fragment">Pack200 is a complex and elaborate technology with significant maintaining cost</li>
+    </ul>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8199871">JDK-8199871</a></p>
+  </section>
+</section>
+
+<section>
+  <h2>Other</h2>
+
+  <section></section>
+
+  <section>
+    <h3>Lazy Allocation of Compiler Threads</h3>
+    <p>With the <code>-XX:+UseDynamicNumberOfCompilerThreads</code> command line argument,
+      only one compiler thread of each type is started at startup.
+      Additional compiler threads' start and shutdown is handled dynamically.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8198756">JDK-8198756</a></p>
+  </section>
+
+  <section>
+    <h3>Some System Properties are Made Readonly</h3>
+    <p>Values of the following system properties are cached at startup:</p>
+    <ul>
+      <li><code>java.home</code></li>
+      <li><code>user.home</code></li>
+      <li><code>user.dir</code></li>
+      <li><code>user.name</code></li>
+    </ul>
+    <p>Changes made to these properties using <code>System.setProperty()</code> after startup
+      will not change the behavior of APIs in the <code>java.base</code> module.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8066709">JDK-8066709</a></p>
+  </section>
+
+  <section>
+    <h3>Low-Overhead Heap Profiling (<a href="https://openjdk.java.net/jeps/331">JEP 331</a>)</h3>
+    <p>It is a way of sampling Java heap allocations designed to meet the following goals:</p>
+    <ul>
+      <li>Low-overhead enough to be continuously enabled by default</li>
+      <li>Accessible via a well-defined, programmatic interface (JVMTI)</li>
+      <li>Can sample all allocations</li>
+      <li>Defined in an implementation-independent way</li>
+      <li>Can give information about both live and dead Java objects</li>
+    </ul>
+
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8171119">JDK-8171119</a></p>
+  </section>
+
+  <section>
+    <h3>Nest-Based Access Control (<a href="https://openjdk.java.net/jeps/181">JEP 181</a>)</h3>
+    <p>Provides support, on the JVM level, for direct access to private members (fields, methods and constructors) of the classes nested into the top-level classes.</p>
+    <p class="bugreport"><a href="http://bugs.java.com/view_bug.do?bug_id=JDK-8010319">JDK-8010319</a></p>
+  </section>
+</section>
+
+<section>
+  <h2>References</h2>
+
+  <ul>
+    <li><a href="https://www.oracle.com/technetwork/java/javase/11-relnote-issues-5012449.html"><i>https://www.oracle.com/</i>technetwork/java/javase/11-relnote-issues-5012449.html</a></li>
+    <li><a href="http://jdk.java.net/11/release-notes"><i>http://jdk.java.net/</i>11/release-notes</a></li>
+  </ul>
+</section>

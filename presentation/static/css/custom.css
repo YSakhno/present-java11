@@ -1,0 +1,49 @@
+iframe {
+  width: 320px;
+  height: 240px;
+}
+
+dl {
+  display: block !important;
+}
+
+img {
+  background-color: white !important;
+  max-height: 80vh !important;
+  box-shadow: none !important;
+  border: 5px white solid !important;
+}
+
+img.blue {
+  background-color: blue !important;
+  border: 20px blue solid !important;
+}
+
+.reveal .grey {
+  color: #888;
+}
+
+.reveal .smaller {
+  font-size: 75%;
+}
+
+a i {
+  opacity: 0.5;
+}
+
+p.bugreport {
+  font-size: 75%;
+  text-align: right;
+}
+
+pre.full-width {
+  width: 100%;
+}
+
+pre code.no-max-height {
+  max-height: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  text-transform: none !important;
+}

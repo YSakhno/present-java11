@@ -1,0 +1,15 @@
+{
+  "name": "present-java11",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./presentation/app"
+  },
+  "repository": "github:ysakhno/present-java11.git",
+  "author": "Yuri Sakhno",
+  "license": "Unlicense",
+  "dependencies": {
+    "presentation": "file:presentation"
+  }
+}

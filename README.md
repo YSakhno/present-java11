@@ -1,2 +1,15 @@
-# present-java11
-Presentation for the Java 11 - What's New talk given at the Java Community Meetup
+# What's New in Java 11
+
+## Presentation
+
+### Setup
+
+```bash
+npm install
+```
+
+### Start
+
+```bash
+npm start
+```
