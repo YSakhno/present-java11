@@ -1,0 +1,198 @@
+<section>
+  <h1>Java 11 - Licensing and Alternatives</h1>
+
+  <small>
+    Yuri Sakhno<br />
+    GitHub: <a target="_blank" href="https://github.com/ysakhno/present-java11">ysakhno/present-java11</a>
+  </small>
+</section>
+
+<section>
+  <h2>The Problem</h2>
+
+  <section>
+    <p>Starting with the release of JDK 11, Oracle drops <i>free</i><sup>1</sup> long-term support<sup>2</sup> of the JDK builds provided by them. Even for so-called LTS releases like JDK 11 itself.</p>
+
+    <p><br></p>
+    <p class="smaller"><sup>1</sup> In this context, "free" means you don't have to pay Oracle.</p>
+    <p class="smaller"><sup>2</sup> In this context, "support" means providing updates to source-code base, and providing builds (binaries) themselves.</p>
+  </section>
+
+  <section>
+    <p>Additionally, they have updated their OTN license to include the following clause:</p>
+    <blockquote cite="https://www.oracle.com/technetwork/java/javase/terms/license/javase-license.html">
+      &ldquo;Further, You may not:<br>
+      - use the Programs for any data processing or any commercial, production,
+        or internal business purposes other than developing, testing, prototyping,
+        and demonstrating your Application&rdquo;
+    </blockquote>
+    <p class="fragment">This is <a href="https://blog.joda.org/2018/09/do-not-fall-into-oracles-java-11-trap.html">believed to be a "trap" by some</a>, because for years Oracle JDK was free for commercial use.</p>
+  </section>
+</section>
+
+<section>
+  <h2>The Alternatives</h2>
+
+  <section>
+    <p class="fragment">First of all, Oracle JDK is itself based on OpenJDK.
+      But Oracle is not the only entity providing builds of OpenJDK code base.
+      There are builds done by other companies and communities, both free and commercial (paid for).</p>
+    <p class="fragment">Let's have a look at those known so far.</p>
+  </section>
+
+  <section>
+    <h3>Oracle JDK</h3>
+
+    <p><a href="http://www.oracle.com/technetwork/java/javase/downloads/"><i>http://www.oracle.com/</i>technetwork/java/javase/downloads/</a></p>
+
+    <ul>
+      <li>From Java 11, this is a branded commercial build with paid for support</li>
+      <li>Can be downloaded and used without cost only for development use</li>
+      <li>Cannot be used in production without paying Oracle</li>
+      <li>Oracle intends to provide full paid support until 2026 or later</li>
+      <li>Unlike in the past, this JDK is not "better" than the OpenJDK build<sup>1</sup></li>
+    </ul>
+
+    <p><br></p>
+    <p class="smaller"><sup>1</sup> Provided both are at the same security patch level</p>
+  </section>
+
+  <section>
+    <h3>OpenJDK built by Oracle</h3>
+
+    <p><a href="http://jdk.java.net/">http://jdk.java.net/</a></p>
+
+    <ul>
+      <li>Free pure unbranded builds of OpenJDK under the GPL license with "Classpath" exception</li>
+      <li>Safe for use in companies and in production without paying Oracle (or anybody)</li>
+      <li>Only available for the first 6 months of a release</li>
+      <li>For Java 11, the expectation is there will be Java 11.0.0, followed by two security patches 11.0.1 and 11.0.2</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>AdoptOpenJDK</h3>
+
+    <p><a href="https://adoptopenjdk.net/">https://adoptopenjdk.net/</a></p>
+
+    <p>AdoptOpenJDK is a community group.</p>
+    <ul>
+      <li>Free pure unbranded builds of OpenJDK under the GPL license with "Classpath" exception</li>
+      <li>Safe for use in companies and in production without paying Oracle (or anybody)</li>
+      <li>Will continue for a much longer period for major releases like Java 11</li>
+      <li>Java 11 builds will continue for 4 years, one year after the next major release</li>
+      <li>Builds will be provided only if other groups create and publish security patches in a source repository at OpenJDK
+        <ul>
+          <li>Both IBM and Red Hat have indicated that they intend to provide those security patches</li>
+        </ul></li>
+      <li>In addition, AdoptOpenJDK will also be providing builds with OpenJ9 instead of HotSpot</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Red Hat OpenJDK</h3>
+
+    <ul>
+      <li>Provides builds via RHEL (commercial product with paid-for support)</li>
+      <li>They are very good at providing security patches back to OpenJDK
+        <ul>
+          <li>Red Hat has run the security updates project of Java 6 and 7 in the past</li>
+        </ul></li>
+      <li>Integrated better into the operating system (not a pure OpenJDK build)</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Other Linux OpenJDK builds</h3>
+
+    <p>Various Linux distros have different ways to access OpenJDK. Here are common distros with relevant links:</p>
+    <ul>
+      <li><a href="https://wiki.debian.org/Java#Java_and_Debian">Debian</a></li>
+      <li><a href="https://fedoraproject.org/wiki/Java#Java_packages_in_Fedora">Fedora</a></li>
+      <li><a href="https://wiki.archlinux.org/index.php/java#Officially_supported_packages">Arch</a></li>
+      <li><a href="https://help.ubuntu.com/community/Java">Ubuntu</a></li>
+    </ul>
+    <p>The disadvantage is that not all distros offer the latest release of the JDK.
+      For example, Debian's current stable (<b>stretch</b>) still offers JDK 8, with JDK 11 expected for <b>buster</b>.</p>
+  </section>
+
+  <section>
+    <h3>Azul Zulu</h3>
+
+    <p><a href="https://www.azul.com/downloads/zulu/">https://www.azul.com/downloads/zulu/</a></p>
+
+    <ul>
+      <li>Branded build of OpenJDK with commercial paid-for support</li>
+      <li>Also provides some Zulu builds for $free as "Zulu Community", with no specific commitments as to availability</li>
+      <li>Has an extensive plan for supporting Zulu commercially, including plans for Java 9, 13 and 15</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>IBM</h3>
+
+    <ul>
+      <li>Provides and supports a JDK for Java 8 and earlier</li>
+      <li>Also provides commercial paid-for support for the AdoptOpenJDK builds with OpenJ9</li>
+    </ul>
+  </section>
+
+  <section>
+    <h3>Liberica from Bellsoft</h3>
+  
+    <p><a href="https://bell-sw.com/java.html">https://bell-sw.com/java.html</a></p>
+  
+    <ul>
+      <li>Free TCK-verified OpenJDK build</li>
+      <li>Builds available for x86 (64-bit), ARM32 and ARM64</li>
+      <li>No info on support lifetimes</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <h2><i>Now</i> what shall we do?</h2>
+
+  <section></section>
+
+  <section>
+    <h3>Options if you want to stay on Java 8</h3>
+
+    <ol>
+      <li>Don't care about security.</li>
+      <li>Rely on Operating System updates (if you have *nix).</li>
+      <li>Pay for support (Oracle or somebody else willing to take your money).</li>
+      <li>Use the non-commercial build in a commercial setting.</li>
+      <li>Build OpenJDK yourself.</li>
+      <li>Use the builds from AdoptOpenJDK or Azul.</li>
+    </ol>
+
+    <p class="smaller">Note: these are not steps; these are (mostly) mutually-exclusive options.</p>
+  </section>
+
+  <section>
+    <h3>Staying on Java 9 or 10</h3>
+  
+    <p>Don't.</p>
+  </section>
+
+  <section>
+    <h3>Options if you want to use on Java 11</h3>
+
+    <p><br></p>
+    <p>The options would be mostly the same as for Java 8, provided people really do what they say they will.
+      Currently, the most promising options sound the ones of using AdoptOpenJDK, SAP or Azul buils,
+      followed by relying on OS-provided ones.</p>
+  </section>
+</section>
+
+<section>
+  <h2>References</h2>
+
+  <ul>
+    <li><a href="https://www.oracle.com/technetwork/java/javaseproducts/overview/javasesubscriptionfaq-4891443.html">Oracle Java SE Subscription FAQ</a></li>
+    <li><a href="https://blog.joda.org/2018/08/java-is-still-available-at-zero-cost.html">Java is still available at zero-cost</a></li>
+    <li><a href="https://blog.joda.org/2018/09/time-to-look-beyond-oracles-jdk.html">Time to look beyond Oracle's JDK</a></li>
+    <li>and other links provided within slides</li>
+  </ul>
+</section>

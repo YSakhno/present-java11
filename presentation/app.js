@@ -20,7 +20,7 @@ const revealPath = path.dirname(require.resolve('reveal.js/package.json'));
   app.use(`/${dir}`, express.static(path.join(revealPath, dir)));
 });
 
-['', 'diffs'].forEach((path) => {
+['', 'diffs', 'licensing'].forEach((path) => {
   let filePath = 'content';
 
   if (path) {
